@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsc",
     "build-front": "yarn --cwd front build",
-    "debug": "yarn build && yarn build-front && node -r source-map-support/register --async-stack-traces ./build/index.js"
+    "debug": "yarn build-front && yarn build && node -r source-map-support/register --async-stack-traces ./build/index.js"
   },
   "engines": {
     "node": ">=12.2.0"
@@ -43,17 +43,13 @@
     "elastic-builder": "^2.7.1",
     "express": "4.17.1",
     "i18n": "0.13.2",
+    "node-sass": "^4.14.1",
+    "sanitize-filename": "^1.6.3",
     "socket.io": "2.3.0",
     "source-map-support": "0.5.19"
   },
   "resolutions": {
     "@types/express-serve-static-core": "4.17.9"
-  },
-  "apidoc": {
-    "title": "***REMOVED*** Api",
-    "order": [
-      "Custom_types"
-    ]
   },
   "jestSonar": {
     "reportPath": "coverage",
@@ -64,13 +60,6 @@
   "jest-junit": {
     "outputDirectory": "./coverage/",
     "outputName": "junit.xml"
-  },
-  "config": {
-    "mongodbMemoryServer": {
-      "downloadDir": "cache",
-      "disablePostinstall": "1",
-      "md5Check": "1"
-    }
   },
   "jest": {
     "transform": {
