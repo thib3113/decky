@@ -8,8 +8,10 @@ import getPort from 'get-port';
 import socketIo from 'socket.io';
 import fallback from 'express-history-api-fallback';
 import compression from 'compression';
-import { config } from './global';
+import {__LOGUUID, config, logger} from './global';
 import { debounce } from "debounce";
+import {createNamespace} from "cls-hooked";
+import { v4 as uuidv4 } from 'uuid';
 
 const frontPath = path.join(appRoot.path, 'app', 'front');
 
@@ -25,6 +27,9 @@ export default class App {
     async start(): Promise<void> {
         this.expressApp = express();
         this.httpServer = http.createServer(this.expressApp);
+
+        //start electron app
+        await app.whenReady();
 
         //enable serving front
         this.expressApp.use(compression());
@@ -42,17 +47,17 @@ export default class App {
         }
 
         this.httpServer.listen(port, '0.0.0.0', () => {
-            console.log(`app is listening on port ${port}`);
+            logger.info(`app is listening on port ${port}`);
         });
 
         this.io = socketIo(this.httpServer);
 
         this.io.on('connection', (socket) => {
-            console.log(`a user connected : ${socket.id}`);
+            const session = createNamespace('session');
+            session.set(__LOGUUID, uuidv4());
+            session.set('socket', socket);
+            logger.debug(`a user connected : ${socket.id}`);
         });
-
-        //start electron app
-        await app.whenReady();
 
         //prepare BrowserWindow configuration
         let browserWindowConfig: BrowserWindowConstructorOptions = {
@@ -72,6 +77,7 @@ export default class App {
         const win = new BrowserWindow(browserWindowConfig);
 
         const updateBounds = debounce((bounds: Rectangle) => {
+            logger.verbose(`change bounds to ${JSON.stringify(bounds)}`);
             config.BROWSER_WINDOWS_Y = bounds.y;
             config.BROWSER_WINDOWS_X = bounds.x;
             config.BROWSER_WINDOWS_WIDTH = bounds.width;

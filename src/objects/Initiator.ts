@@ -3,6 +3,7 @@ import { pkg } from '../global';
 import * as fs from 'fs';
 import * as path from 'path';
 import config from './Config/Config'
+import logger, {WINSTON_LOG_LEVEL} from './Logger'
 
 export default class Initiator {
     static async init() {
@@ -18,6 +19,12 @@ export default class Initiator {
         //no recursive, in case of bad sub directory name
         if (!fs.existsSync(configDirectory)) {
             fs.mkdirSync(configDirectory);
+        }
+
+        //create plugins directory
+        const logsDirectory = path.join(configDirectory, 'logs');
+        if (!fs.existsSync(logsDirectory)) {
+            fs.mkdirSync(logsDirectory);
         }
 
         //create plugins directory
@@ -41,9 +48,11 @@ export default class Initiator {
         config.setDirectories({
             configFile,
             pluginDirectory,
-            databasesDirectory
+            databasesDirectory,
+            logsDirectory
         });
 
         config.init();
+        logger.init(config.LOG_LEVEL as WINSTON_LOG_LEVEL, logsDirectory);
     }
 }
