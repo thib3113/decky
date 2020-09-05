@@ -2,6 +2,9 @@ import appRoot from 'app-root-path';
 import * as path from 'path';
 import * as fs from 'fs';
 import config from './objects/Config/Config';
+import logger from './objects/Logger'
+export * from './constants';
+export * from './utils'
 
 let pkg: {
     name: string;
@@ -14,4 +17,6 @@ try {
     throw new Error('fail to read package.json');
 }
 
-export { pkg, config };
+
+
+export { pkg, config, logger };

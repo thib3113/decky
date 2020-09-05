@@ -1,13 +1,14 @@
 import { IDirectories } from './IDirectories';
 import fs from 'fs';
 import extend from 'extend';
-import ObjectWithPrivateValues from "../ObjectWithPrivateValues";
+import ObjectWithPrivateValues from '../ObjectWithPrivateValues';
+import { E_NODE_ENV, getNodeEnv } from '../../utils';
 
 // <-- BUILDED -->
 export const CONFIG_VERSION = '0.0.1';
 // <!-- BUILDED -->
 
-class Config extends ObjectWithPrivateValues{
+class Config extends ObjectWithPrivateValues {
     /** declare configs here **/
 
     /**
@@ -19,6 +20,7 @@ class Config extends ObjectWithPrivateValues{
     public BROWSER_WINDOWS_HEIGHT: number = 800;
     public BROWSER_WINDOWS_X: number;
     public BROWSER_WINDOWS_Y: number;
+    public LOG_LEVEL: string = getNodeEnv() === E_NODE_ENV.DEV ? 'debug' : 'error';
 
     /** declare configs before **/
 
@@ -33,7 +35,6 @@ class Config extends ObjectWithPrivateValues{
     get directories(): IDirectories {
         return this._directories;
     }
-
 
     get _directories(): IDirectories {
         return this.getPrivate('directories');
@@ -82,7 +83,7 @@ class Config extends ObjectWithPrivateValues{
 
         fs.writeFileSync(this._directories.configFile, configStringified);
 
-        if(skipReload){
+        if (skipReload) {
             this.load();
         }
     }
