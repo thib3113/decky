@@ -1,14 +1,16 @@
 {
   "name": "decky",
   "version": "1.0.0",
-  "main": "build/index.js",
+  "main": "app/back/index.js",
   "author": "thibaut severac <thib3113@gmail.com>",
   "license": "MIT",
   "description": "",
   "scripts": {
-    "build": "tsc",
-    "build-front": "yarn --cwd front build",
-    "debug": "yarn build && yarn build-front && node -r source-map-support/register --async-stack-traces ./build/index.js"
+    "start": "electron .",
+    "build": "ts-node scripts/build.ts",
+    "build:back": "tsc",
+    "build:front": "yarn --cwd front build",
+    "debug": "yarn build:back && node -r source-map-support/register --async-stack-traces ./app/back/index.js"
   },
   "engines": {
     "node": ">=12.2.0"
@@ -20,6 +22,7 @@
   "devDependencies": {
     "@types/app-root-path": "1.2.4",
     "@types/body-parser": "1.19.0",
+    "@types/compression": "^1.7.0",
     "@types/cookie-parser": "1.4.2",
     "@types/express": "4.17.7",
     "@types/express-serve-static-core": "4.17.9",
@@ -28,32 +31,33 @@
     "@types/socket.io": "2.1.11",
     "@typescript-eslint/eslint-plugin": "3.9.1",
     "@typescript-eslint/parser": "3.9.1",
+    "electron": "^10.1.1",
     "eslint": "6.8.0",
     "eslint-config-prettier": "6.11.0",
     "eslint-plugin-prettier": "3.1.4",
+    "express-history-api-fallback": "^2.2.1",
+    "extend": "^3.0.2",
+    "gulp": "^4.0.2",
+    "gulp-run-command": "^0.0.10",
     "prettier": "2.0.5",
-    "typescript": "3.9.7",
-    "yarn-or-npm": "^3.0.1"
+    "ts-node": "^9.0.0",
+    "typescript": "4.0.2"
   },
   "dependencies": {
     "app-root-path": "3.0.0",
     "body-parser": "1.19.0",
     "busboy-body-parser": "0.3.2",
+    "compression": "^1.7.4",
+    "debounce": "^1.2.0",
     "debug": "^4.1.1",
     "elastic-builder": "^2.7.1",
-    "express": "4.17.1",
+    "express": "^4.17.1",
+    "get-port": "^5.1.1",
     "i18n": "0.13.2",
-    "socket.io": "2.3.0",
+    "node-sass": "^4.14.1",
+    "sanitize-filename": "^1.6.3",
+    "socket.io": "^2.3.0",
     "source-map-support": "0.5.19"
-  },
-  "resolutions": {
-    "@types/express-serve-static-core": "4.17.9"
-  },
-  "apidoc": {
-    "title": "***REMOVED*** Api",
-    "order": [
-      "Custom_types"
-    ]
   },
   "jestSonar": {
     "reportPath": "coverage",
@@ -64,13 +68,6 @@
   "jest-junit": {
     "outputDirectory": "./coverage/",
     "outputName": "junit.xml"
-  },
-  "config": {
-    "mongodbMemoryServer": {
-      "downloadDir": "cache",
-      "disablePostinstall": "1",
-      "md5Check": "1"
-    }
   },
   "jest": {
     "transform": {
