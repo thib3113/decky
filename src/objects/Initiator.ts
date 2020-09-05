@@ -2,6 +2,7 @@ import sanitize from 'sanitize-filename';
 import { pkg } from '../global';
 import * as fs from 'fs';
 import * as path from 'path';
+import config from './Config/Config'
 
 export default class Initiator {
     static async init() {
@@ -11,7 +12,7 @@ export default class Initiator {
     static async prepareDirectories() {
         const configDirectory = `${
             process.env.APPDATA ||
-            (process.platform == 'darwin' ? `${process.env.HOME}Library/Preferences` : `${process.env.HOME}/.local/share`)
+            (process.platform == 'darwin' ? `${process.env.HOME}/Library/Preferences` : `${process.env.HOME}/.local/share`)
         }/${sanitize(pkg.name)}/`;
 
         //no recursive, in case of bad sub directory name
@@ -37,6 +38,12 @@ export default class Initiator {
             fs.writeFileSync(configFile, JSON.stringify({ __version: '0.0.0' }));
         }
 
-        console.log(configDirectory);
+        config.setDirectories({
+            configFile,
+            pluginDirectory,
+            databasesDirectory
+        });
+
+        config.init();
     }
 }

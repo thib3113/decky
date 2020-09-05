@@ -247,7 +247,6 @@ yarn-cache
 buildTests/
 
 /front/build
-/VERSION
 /key
 /key.pub
 /junit.xml
@@ -257,17 +256,10 @@ buildTests/
 
 /docs
 
-/tests/scripts/globalConfig.json
-
 /cache
-
 /configs
-
-/tests/datas/SETUP_GENERATED
-
-/apiDoc
-/frontBuild
 /debug.json
 
-#yarn.lock contain link to jvsonline, not accessible from GRC servers
 /yarn.lock
+
+/app

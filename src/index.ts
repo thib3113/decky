@@ -1,9 +1,13 @@
-import Initiator from "./objects/Initiator";
+import App from "./App";
 
-// start initiator
-
-Initiator.init().then(() => {
+// start app
+const app = new App();
+app.init().then(() => {
     console.log('hello world');
-}).catch(e => console.error(e));
+    return app.start();
+}).catch(e => {
+    console.error(e);
+    process.exit(e.code || 1);
+});
 
 

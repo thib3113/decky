@@ -9,7 +9,7 @@
     "sourceMap": true,
     "allowJs": true,
     "esModuleInterop": true,
-    "outDir": "build",
+    "outDir": "app/back",
     "experimentalDecorators": true,
     "types": [
       "@types/express-serve-static-core",

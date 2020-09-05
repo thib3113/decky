@@ -1,10 +1,11 @@
 import appRoot from 'app-root-path';
-import * as path from "path";
-import * as fs from "fs";
+import * as path from 'path';
+import * as fs from 'fs';
+import config from './objects/Config/Config';
 
 let pkg: {
-    name: string
-}
+    name: string;
+};
 
 try {
     pkg = JSON.parse(fs.readFileSync(path.join(appRoot.path, 'package.json')).toString());
@@ -13,5 +14,4 @@ try {
     throw new Error('fail to read package.json');
 }
 
-
-export { pkg };
+export { pkg, config };
