@@ -1,9 +1,9 @@
-import sanitize from 'sanitize-filename';
-import { pkg } from '../global';
 import * as fs from 'fs';
 import * as path from 'path';
-import config from './Config/Config'
-import logger, {WINSTON_LOG_LEVEL} from './Logger'
+import config from './Config/Config';
+import logger, { WINSTON_LOG_LEVEL } from './Logger';
+import { app } from 'electron';
+import Databases from "./Databases/Databases";
 
 export default class Initiator {
     static async init() {
@@ -11,10 +11,7 @@ export default class Initiator {
     }
 
     static async prepareDirectories() {
-        const configDirectory = `${
-            process.env.APPDATA ||
-            (process.platform == 'darwin' ? `${process.env.HOME}/Library/Preferences` : `${process.env.HOME}/.local/share`)
-        }/${sanitize(pkg.name)}/`;
+        const configDirectory = path.join(app.getPath('userData'), '__app');
 
         //no recursive, in case of bad sub directory name
         if (!fs.existsSync(configDirectory)) {
@@ -38,12 +35,19 @@ export default class Initiator {
         if (!fs.existsSync(databasesDirectory)) {
             fs.mkdirSync(databasesDirectory);
         }
+        Databases.setDatabaseFolder(databasesDirectory);
 
         //create config.json
         const configFile = path.join(configDirectory, 'config.json');
         if (!fs.existsSync(configFile)) {
             fs.writeFileSync(configFile, JSON.stringify({ __version: '0.0.0' }));
         }
+        //
+        // //create actions directory
+        // const actionsDatabaseDirectory = path.join(config.directories.databasesDirectory, 'actions');
+        // if (!fs.existsSync(actionsDatabaseDirectory)) {
+        //     fs.mkdirSync(actionsDatabaseDirectory);
+        // }
 
         config.setDirectories({
             configFile,
@@ -54,5 +58,7 @@ export default class Initiator {
 
         config.init();
         logger.init(config.LOG_LEVEL as WINSTON_LOG_LEVEL, logsDirectory);
+
+        //
     }
 }
