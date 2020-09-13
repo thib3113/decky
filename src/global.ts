@@ -5,6 +5,7 @@ import config from './objects/Config/Config';
 import logger from './objects/Logger'
 export * from './constants';
 export * from './utils'
+import db from './objects/Databases/Databases'
 
 let pkg: {
     name: string;
@@ -19,4 +20,4 @@ try {
 
 
 
-export { pkg, config, logger };
+export { pkg, config, logger, db };

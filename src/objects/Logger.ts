@@ -110,6 +110,8 @@ export class Logger {
     public _log(level: WINSTON_LOGS_FUNCTION, ...args): this {
         if (args.length === 0) {
             console.error('bug with winston and empty logger commands');
+        } else if (!this.logger) {
+            console.error(...args);
         } else {
             // @ts-ignore
             this.logger.log(level, ...args);
